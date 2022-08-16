@@ -1,35 +1,33 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-# standard python imports
-
-from db import db
+from .db import db
 
 
-class ItemModel(db.Model):
-    __tablename__ = 'items'
+class ClientModel(db.Model):
+    __tablename__ = 'clientes'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80))
-    price = db.Column(db.Float(precision=2))
+    name = db.Column(db.String(255))
+    email = db.Column(db.String(255))
+    password = db.Column(db.String(255))
+    passwordConfirmation = db.Column(db.String(255))
+    phone = db.Column(db.String(255))
 
-    store_id = db.Column(db.Integer, db.ForeignKey('stores.id'))
-    store = db.relationship('StoreModel')
-
-    def __init__(self, name, price, store_id):
+    def __init__(self, name, email, password, passwordConfirmation, phone=None):
         self.name = name
-        self.price = price
-        self.store_id = store_id
+        self.email = email
+        self.password = password
+        self.passwordConfirmation = passwordConfirmation
+        self.phone = phone
 
     def json(self):
-        return {'name': self.name, 'price': self.price, 'store_id': self.store_id}
+        return {'name': self.name, 'email': self.email, 'password': self.password, 'passwordConfirmation': self.passwordConfirmation, 'phone': self.phone}
 
     @classmethod
-    def find_by_name(cls, name):
-        return cls.query.filter_by(name=name).first()  # simple TOP 1 select
+    def find_by_client(cls, email):
+        return cls.query.filter_by(email=email).first()
 
-    def save_to_db(self):  # Upserting data
+    def save_to_db(self):
         db.session.add(self)
-        db.session.commit()  # Balla
+        db.session.commit()
 
     def delete_from_db(self):
         db.session.delete(self)

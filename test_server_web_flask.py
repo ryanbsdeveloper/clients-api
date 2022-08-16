@@ -16,3 +16,5 @@ class TestHomeView(unittest.TestCase):
     def test_content_type(self):
         self.assertIn('text/html', self.response.content_type)
 
+
+unittest.main()
